@@ -28,6 +28,11 @@ class MainFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container,false)
         binding.FirstButton.setOnClickListener {
+            val first = FirstFragment()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.nav_host_fragment, first)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
         }
         binding.SecondButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_secondFragment)
