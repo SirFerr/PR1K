@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.pr1k.MainFragment"
+        android:name="com.example.pr1k.UI.View.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_firstFragment"
             app:destination="@id/firstFragment" />
@@ -19,12 +19,25 @@
     </fragment>
     <fragment
         android:id="@+id/firstFragment"
-        android:name="com.example.pr1k.FirstFragment"
+        android:name="com.example.pr1k.UI.View.FirstFragment"
         android:label="fragment_first"
-        tools:layout="@layout/fragment_first" />
+        tools:layout="@layout/fragment_first">
+        <action
+            android:id="@+id/action_firstFragment_to_addFragment"
+            app:destination="@id/addFragment" />
+    </fragment>
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.example.pr1k.SecondFragment"
+        android:name="com.example.pr1k.UI.View.SecondFragment"
         android:label="fragment_second"
         tools:layout="@layout/fragment_second" />
+    <fragment
+        android:id="@+id/addFragment"
+        android:name="com.example.pr1k.UI.View.AddFragment"
+        android:label="fragment_add"
+        tools:layout="@layout/fragment_add">
+        <action
+            android:id="@+id/action_addFragment_to_firstFragment"
+            app:destination="@id/firstFragment" />
+    </fragment>
 </navigation>
