@@ -30,7 +30,11 @@
         android:id="@+id/secondFragment"
         android:name="com.example.pr1k.UI.View.SecondFragment"
         android:label="fragment_second"
-        tools:layout="@layout/fragment_second" />
+        tools:layout="@layout/fragment_second">
+        <action
+            android:id="@+id/action_secondFragment_to_dateListFragment"
+            app:destination="@id/dateListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.pr1k.UI.View.AddFragment"
@@ -40,4 +44,9 @@
             android:id="@+id/action_addFragment_to_firstFragment"
             app:destination="@id/firstFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/dateListFragment"
+        android:name="com.example.pr1k.UI.View.DateListFragment"
+        android:label="fragment_date_list"
+        tools:layout="@layout/fragment_date_list" />
 </navigation>

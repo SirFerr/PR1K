@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -17,6 +18,8 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.pr1k.R
 import com.example.pr1k.databinding.FragmentSecondBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -25,11 +28,12 @@ import java.util.Locale
 class SecondFragment : Fragment() {
     private lateinit var binding: FragmentSecondBinding
     private var imageCapture: ImageCapture? = null
+    private val FILENAME = "Date.txt"
 
     companion object {
         private const val TAG = "CameraXApp"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private val REQUIRED_PERMISSIONS =
+        val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
@@ -40,18 +44,50 @@ class SecondFragment : Fragment() {
             }.toTypedArray()
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSecondBinding.inflate(inflater, container, false)
-        startCamera()
+        requestPermissions()
         binding.shotBtn.setOnClickListener {
             takePhoto()
-        }
 
+        }
+        binding.listBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_secondFragment_to_dateListFragment)
+        }
         return binding.root
     }
+
+    private fun requestPermissions() {
+        activityResultLauncher.launch(SecondFragment.REQUIRED_PERMISSIONS)
+    }
+
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            // Handle Permission granted/rejected
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in MainActivity.REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                Toast.makeText(
+                    requireContext(),
+                    "Permission request denied",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                startCamera()
+            }
+        }
+
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
@@ -102,6 +138,7 @@ class SecondFragment : Fragment() {
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
         }
 
+
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(
@@ -111,8 +148,6 @@ class SecondFragment : Fragment() {
             )
             .build()
 
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
@@ -123,7 +158,8 @@ class SecondFragment : Fragment() {
 
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
+                    val msg = "Photo capture succeeded"
+                    Log.d("photo", msg)
                     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                 }
             }
