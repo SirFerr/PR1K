@@ -25,6 +25,7 @@ class MainFragment : Fragment() {
         binding.SecondButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_secondFragment)
         }
+
         return binding.root
     }
 

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pr1k.Data.Item.Item
 import com.example.pr1k.databinding.FragmentDateListBinding
+import java.io.File
 
 
 class DateListFragment : Fragment() {
@@ -27,9 +28,21 @@ class DateListFragment : Fragment() {
 
         var tempList: MutableList<Item> = ArrayList()
 
-        for (i: Int in 0..10) {
-            tempList.add(Item(i, "${i}"))
+        val file = File(
+            requireContext().getExternalFilesDir("Pictures/CameraX-Image/"),
+            "Date.txt"
+        )
+
+        binding.rewriteBtn.setOnClickListener {
+            file.writeText("")
+            file.forEachLine { tempList.add(Item(0, it)) }
+            adapter.setData(tempList)
+            binding.recyclerView.adapter = adapter
         }
+        file.forEachLine { tempList.add(Item(0, it)) }
+
+
+
 
         Log.d("array", tempList.toString())
         adapter.setData(tempList)

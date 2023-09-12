@@ -140,9 +140,10 @@ class SecondFragment : Fragment() {
         }
 
         val file = File(
-            requireContext().applicationContext.filesDir,
-            "Pictures/CameraX-Image/$FILENAME"
+            requireContext().getExternalFilesDir("Pictures/CameraX-Image/"),
+            "$FILENAME"
         )
+        file.appendText(name + "\n")
 
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
