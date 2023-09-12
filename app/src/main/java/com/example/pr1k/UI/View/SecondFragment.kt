@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.pr1k.R
 import com.example.pr1k.databinding.FragmentSecondBinding
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -51,9 +52,9 @@ class SecondFragment : Fragment() {
     ): View? {
         binding = FragmentSecondBinding.inflate(inflater, container, false)
         requestPermissions()
+
         binding.shotBtn.setOnClickListener {
             takePhoto()
-
         }
         binding.listBtn.setOnClickListener {
             findNavController().navigate(R.id.action_secondFragment_to_dateListFragment)
@@ -138,6 +139,10 @@ class SecondFragment : Fragment() {
             put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
         }
 
+        val file = File(
+            requireContext().applicationContext.filesDir,
+            "Pictures/CameraX-Image/$FILENAME"
+        )
 
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions
@@ -165,4 +170,7 @@ class SecondFragment : Fragment() {
             }
         )
     }
+
+
 }
+
