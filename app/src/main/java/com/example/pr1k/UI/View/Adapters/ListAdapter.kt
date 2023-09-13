@@ -1,4 +1,4 @@
-package com.example.pr1k.UI.View
+package com.example.pr1k.UI.View.Adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,6 +19,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
             binding
         )
     }
+
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = itemList[position]

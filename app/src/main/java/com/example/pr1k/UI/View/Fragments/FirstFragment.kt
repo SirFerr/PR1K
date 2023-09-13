@@ -1,4 +1,4 @@
-package com.example.pr1k.UI.View
+package com.example.pr1k.UI.View.Fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pr1k.R
+import com.example.pr1k.UI.View.Adapters.ListAdapter
 import com.example.pr1k.UI.ViewModel.ItemVM
 import com.example.pr1k.databinding.FragmentFirstBinding
 
@@ -24,6 +25,8 @@ class FirstFragment : Fragment() {
         mItemVM.getAllData.observe(viewLifecycleOwner) { item ->
             adapter.setData(item)
         }
+        adapter.notifyDataSetChanged()
+
         binding.resyclerView.adapter = adapter
     }
 

@@ -1,4 +1,4 @@
-package com.example.pr1k.UI.View
+package com.example.pr1k.UI.View.Fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

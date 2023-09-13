@@ -1,4 +1,4 @@
-package com.example.pr1k.UI.View
+package com.example.pr1k.UI.View.Fragments
 
 import android.Manifest
 import android.content.ContentValues
@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.pr1k.R
+import com.example.pr1k.UI.View.Activitys.MainActivity
 import com.example.pr1k.databinding.FragmentSecondBinding
 import java.io.File
 import java.text.SimpleDateFormat
@@ -63,7 +64,7 @@ class SecondFragment : Fragment() {
     }
 
     private fun requestPermissions() {
-        activityResultLauncher.launch(SecondFragment.REQUIRED_PERMISSIONS)
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
     }
 
 

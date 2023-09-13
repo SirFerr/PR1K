@@ -1,4 +1,4 @@
-package com.example.pr1k.UI.View
+package com.example.pr1k.UI.View.Activitys
 
 import android.Manifest
 import android.os.Build

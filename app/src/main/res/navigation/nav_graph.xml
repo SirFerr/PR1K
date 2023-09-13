@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.pr1k.UI.View.MainFragment"
+        android:name="com.example.pr1k.UI.View.Fragments.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/firstFragment"
-        android:name="com.example.pr1k.UI.View.FirstFragment"
+        android:name="com.example.pr1k.UI.View.Fragments.FirstFragment"
         android:label="fragment_first"
         tools:layout="@layout/fragment_first">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.example.pr1k.UI.View.SecondFragment"
+        android:name="com.example.pr1k.UI.View.Fragments.SecondFragment"
         android:label="fragment_second"
         tools:layout="@layout/fragment_second">
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/addFragment"
-        android:name="com.example.pr1k.UI.View.AddFragment"
+        android:name="com.example.pr1k.UI.View.Fragments.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add">
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/dateListFragment"
-        android:name="com.example.pr1k.UI.View.DateListFragment"
+        android:name="com.example.pr1k.UI.View.Fragments.DateListFragment"
         android:label="fragment_date_list"
         tools:layout="@layout/fragment_date_list" />
 </navigation>

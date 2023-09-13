@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +21,7 @@
         android:theme="@style/Theme.PR1K"
         tools:targetApi="28">
         <activity
-            android:name=".UI.View.MainActivity"
+            android:name=".UI.View.Activitys.MainActivity"
             android:exported="true">
 
             <intent-filter>

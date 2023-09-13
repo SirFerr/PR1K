@@ -1,4 +1,4 @@
-package com.example.pr1k.UI.View
+package com.example.pr1k.UI.View.Fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pr1k.Data.Item.Item
+import com.example.pr1k.UI.View.Adapters.ListAdapter
 import com.example.pr1k.databinding.FragmentDateListBinding
 import java.io.File
 
@@ -32,12 +33,15 @@ class DateListFragment : Fragment() {
             requireContext().getExternalFilesDir("Pictures/CameraX-Image/"),
             "Date.txt"
         )
+        binding.recyclerView.adapter = adapter
 
         binding.rewriteBtn.setOnClickListener {
             file.writeText("")
             file.forEachLine { tempList.add(Item(0, it)) }
             adapter.setData(tempList)
-            binding.recyclerView.adapter = adapter
+
+            adapter.notifyDataSetChanged()
+
         }
         file.forEachLine { tempList.add(Item(0, it)) }
 
@@ -46,7 +50,7 @@ class DateListFragment : Fragment() {
 
         Log.d("array", tempList.toString())
         adapter.setData(tempList)
-        binding.recyclerView.adapter = adapter
+
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         return binding.root
     }
