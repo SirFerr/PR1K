@@ -1,20 +1,19 @@
-package com.example.pr1k.Data.Weather.Sql
+package com.example.pr1k.Data.Product.Sql
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.pr1k.Data.Item.Item
 
-@Database(entities = [Item::class], version = 1, exportSchema = false)
-abstract class WeatherDatabase : RoomDatabase() {
-    abstract fun weatherDao(): WeatherDao
+@Database(entities = [Product::class], version = 1, exportSchema = false)
+abstract class ProductDatabase : RoomDatabase() {
+    abstract fun productDao(): ProductDao
 
     companion object {
         @Volatile
-        private var INSTANCE: WeatherDatabase? = null
+        private var INSTANCE: ProductDatabase? = null
 
-        fun getDatabase(context: Context): WeatherDatabase {
+        fun getDatabase(context: Context): ProductDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -22,8 +21,8 @@ abstract class WeatherDatabase : RoomDatabase() {
             synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    WeatherDatabase::class.java,
-                    "weather_database"
+                    ProductDatabase::class.java,
+                    "product_database"
                 ).build()
                 INSTANCE = instance
                 return instance
