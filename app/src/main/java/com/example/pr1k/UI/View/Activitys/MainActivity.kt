@@ -4,7 +4,13 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pr1k.UI.ViewModel.ProductVM
 import com.example.pr1k.databinding.ActivityMainBinding
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.GlobalContext
+import org.koin.dsl.module
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,7 +36,12 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        GlobalContext.startKoin {
+            androidLogger()
+            androidContext(this@MainActivity)
+            modules(module {
+                viewModel { ProductVM(application) }
+            })
+        }
     }
-
-
 }
