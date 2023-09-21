@@ -1,32 +1,26 @@
 package com.example.pr1k.UI.View.Fragments
 
 import android.Manifest
-import android.content.ContentValues
+import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.pr1k.R
-import com.example.pr1k.UI.View.Activitys.MainActivity
 import com.example.pr1k.databinding.FragmentSecondBinding
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.io.FileOutputStream
 
 
+@Suppress("DEPRECATION")
 class SecondFragment : Fragment() {
     private lateinit var binding: FragmentSecondBinding
     private var imageCapture: ImageCapture? = null
@@ -52,127 +46,93 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSecondBinding.inflate(inflater, container, false)
-        requestPermissions()
 
-        binding.shotBtn.setOnClickListener {
-            takePhoto()
+        binding.search.setOnClickListener {
+            downloadImageAndSetInView(binding.image, binding.urlText.text.toString())
+
         }
-        binding.listBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_secondFragment_to_dateListFragment)
+
+        binding.download.setOnClickListener {
+            downloadImageAndSave(binding.urlText.text.toString(), "1.jpg")
         }
+
         return binding.root
     }
 
-    private fun requestPermissions() {
-        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
-    }
 
+    private fun downloadImageAndSetInView(imageView: ImageView, imageUrl: String) {
+        Toast.makeText(
+            requireContext(),
+            "Please wait, it may take a few minutes...",
+            Toast.LENGTH_SHORT
+        ).show()
 
-    private val activityResultLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        )
-        { permissions ->
-            // Handle Permission granted/rejected
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in MainActivity.REQUIRED_PERMISSIONS && it.value == false)
-                    permissionGranted = false
-            }
-            if (!permissionGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    "Permission request denied",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                startCamera()
-            }
-        }
-
-
-    private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
-        cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-            // Preview
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-                }
-
-            imageCapture = ImageCapture.Builder()
-                .build()
-
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
+        AsyncTask.execute {
             try {
-                // Unbind use cases before rebinding
-                cameraProvider.unbindAll()
-
-                // Bind use cases to camera
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
-                )
-
-            } catch (exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                val `in` = java.net.URL(imageUrl).openStream()
+                val image = BitmapFactory.decodeStream(`in`)
+                requireActivity().runOnUiThread {
+                    imageView.setImageBitmap(image)
+                }
+            } catch (e: Exception) {
+                Log.e("Error Message", e.message.toString())
+                e.printStackTrace()
             }
-
-        }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
-    private fun takePhoto() {
-        // Get a stable reference of the modifiable image capture use case
-        val imageCapture = imageCapture ?: return
-
-        // Create time stamped name and MediaStore entry.
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-            .format(System.currentTimeMillis())
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
         }
-
-        val file = File(
-            requireContext().getExternalFilesDir("Pictures/CameraX-Image/"),
-            "$FILENAME"
-        )
-        file.appendText(name + "\n")
-
-        // Create output options object which contains file + metadata
-        val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(
-                requireContext().contentResolver,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
-            .build()
-
-        imageCapture.takePicture(
-            outputOptions,
-            ContextCompat.getMainExecutor(requireContext()),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(requireContext(), "Err", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val msg = "Photo capture succeeded"
-                    Log.d("photo", msg)
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                }
-            }
-        )
     }
 
+    private fun downloadImageAndSave(imageUrl: String, fileName: String) {
 
+
+        // Показать сообщение ожидания
+        Toast.makeText(
+            requireContext(),
+            "Please wait, it may take a few minutes...",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        AsyncTask.execute {
+            try {
+                val input = java.net.URL(imageUrl).openStream()
+                val outputDir =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                val outputFile = File(outputDir, fileName)
+
+                // Создать выходной поток для сохранения изображения
+                val outputStream = FileOutputStream(outputFile)
+
+                // Скопировать данные из входного потока в выходной поток
+                val buffer = ByteArray(4 * 1024)
+                var bytesRead: Int
+                while (input.read(buffer).also { bytesRead = it } != -1) {
+                    outputStream.write(buffer, 0, bytesRead)
+                }
+
+                // Закрыть потоки
+                input.close()
+                outputStream.close()
+
+                requireActivity().runOnUiThread {
+                    // Обновить галерею, чтобы изображение было видно в приложениях для просмотра изображений
+                    MediaScannerConnection.scanFile(
+                        requireContext(),
+                        arrayOf(outputFile.toString()),
+                        null,
+                        null
+                    )
+
+                    // Показать сообщение об успешном сохранении
+                    Toast.makeText(
+                        requireContext(),
+                        "Image saved to ${outputFile.absolutePath}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("Error Message", e.message.toString())
+                e.printStackTrace()
+            }
+        }
+    }
 }
 

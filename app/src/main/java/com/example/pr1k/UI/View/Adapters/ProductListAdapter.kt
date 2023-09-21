@@ -15,6 +15,7 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.MyViewHolder>
 
     fun setData(products: List<Product>) {
         this.productList = products
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(

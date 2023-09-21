@@ -38,9 +38,8 @@ class DateListFragment : Fragment() {
         binding.rewriteBtn.setOnClickListener {
             file.writeText("")
             file.forEachLine { tempList.add(Item(0, it)) }
+            binding.recyclerView.adapter = adapter
             adapter.setData(tempList)
-
-            adapter.notifyDataSetChanged()
 
         }
         file.forEachLine { tempList.add(Item(0, it)) }

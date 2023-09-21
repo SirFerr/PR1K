@@ -3,9 +3,12 @@ package com.example.pr1k.UI.View.Activitys
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pr1k.UI.ViewModel.ProductVM
 import com.example.pr1k.databinding.ActivityMainBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+       
         GlobalContext.startKoin {
             androidLogger()
             androidContext(this@MainActivity)
@@ -44,4 +47,5 @@ class MainActivity : AppCompatActivity() {
             })
         }
     }
+
 }

@@ -29,6 +29,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
     fun setData(item: List<Item>) {
         this.itemList = item
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
